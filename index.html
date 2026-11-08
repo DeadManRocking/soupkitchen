@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1f5c4d">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg"><title>Soup Lab: The Metavegetable</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font:15px/1.4 Georgia,'Times New Roman',serif;color:#3a2a20;background:#fbf1dc;
+background-image:linear-gradient(90deg,rgba(200,70,60,.11) 50%,transparent 50%),linear-gradient(rgba(200,70,60,.11) 50%,transparent 50%);background-size:30px 30px}
+#app{max-width:520px;margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 10px) 12px 110px}
+h1{margin:4px 0 0;font-size:26px;line-height:1.1;color:#1f5c4d;letter-spacing:-.5px}
+.sub{margin:2px 0 8px;font-style:italic;font-size:13px}
+h3{margin:14px 0 6px;font-size:15px}
+#quip{background:#fff;border:2px dashed #1f5c4d;border-radius:14px;padding:8px 12px;font-style:italic;min-height:44px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.card{background:#fffaf0;border:2px solid #d9c3a0;border-radius:16px;padding:6px 4px;text-align:center;font-size:11.5px;cursor:pointer;position:relative}
+.card b{display:block;line-height:1.1;margin:2px 0 3px}
+.card.sel{border-color:#1f5c4d;background:#e4f4e6;box-shadow:0 0 0 3px #7cc48a}
+.card.det{border-style:solid;border-color:#c9573b}
+.chips{display:flex;justify-content:center;gap:2px;flex-wrap:wrap}
+.chips i{font:700 10px sans-serif;width:15px;height:15px;border-radius:50%;background:#e7dcc7;color:#a8977c;display:grid;place-items:center}
+.chips i.on{background:#2e9b55;color:#fff}
+.ticks{font-size:10px;letter-spacing:2px;margin-top:2px}
+.seeds{background:#e9f6ea;border-radius:16px;padding:8px;margin-top:10px}
+.panel{background:#fff;border:2px solid #d9c3a0;border-radius:16px;padding:10px;margin-top:12px}
+.chr{display:flex;align-items:center;gap:8px;margin:4px 0;font-size:12px}
+.chr>span:first-child{width:92px}
+.st{display:inline-flex;gap:4px;background:#f3ead8;padding:3px 6px;border-radius:10px}
+u{width:15px;height:15px;border-radius:50%;border:2px solid;display:inline-block}
+u.t{border-color:#b24a8c}u.t.d{background:#b24a8c}
+u.v{border-color:#2e9b55}u.v.d{background:#2e9b55}
+.bar{position:fixed;left:0;right:0;bottom:0;display:flex;gap:6px;justify-content:center;padding:10px 10px calc(env(safe-area-inset-bottom,0px) + 10px);background:#1f5c4d}
+button{font:700 14px Georgia,serif;border:0;border-radius:14px;padding:12px 14px;background:#f7d36b;color:#3a2a20;min-height:46px}
+button.go{background:#e96a4b;color:#fff;flex:1}
+button.g2{background:#cfe9d2}
+button:active{transform:scale(.96)}
+.ov{position:fixed;inset:0;background:rgba(20,40,34,.82);display:grid;place-items:center;padding:16px;z-index:5;overflow:auto}
+.modal{background:#fffaf0;border-radius:20px;padding:16px;max-width:440px;width:100%;border:4px solid #1f5c4d;text-align:center}
+.modal h2{margin:0 0 6px;color:#1f5c4d}
+.modal input{width:100%;font:18px Georgia,serif;padding:10px;border:2px solid #1f5c4d;border-radius:12px;text-align:center;margin:8px 0}
+.modal li{text-align:left;margin:3px 0;font-size:13px}
+.modal ul{padding-left:18px;margin:6px 0}
+@media (prefers-reduced-motion:no-preference){.wob{animation:w 2.4s ease-in-out infinite}@keyframes w{50%{transform:rotate(4deg)}}}
+</style></head><body><div id="app"></div>
+<script>
+/* ===== PERSONALIZE ME ===== */
+const CFG={
+ name:"Kimmie",
+ ded:"For Kimmikins, who went 4 rounds and won!",
+ msg:"Fuck C — I’ll see you at letter Z!! You will didded it!! :D"
+};
+/* ========================== */
+const KEY='soupLabV1',V=['A','B','C','D','E','K'];
+const R='111',N='000',P='010',Q='001';
+const START=[["Carrotina",[[R,R],[R,R],[R,R]]],["Beetrice",[[N,N],[N,N],[N,N]]],["Leek Skywalker",[[P,P],[Q,Q],[P,P]]],["Lettuce Alone",[[R,N],[R,Q],[N,P]]],["Sir Eggplantsby",[[P,N],[N,N],[P,R]]],["Count Broccula",[[R,P],[N,R],[R,N]]]];
+const LAB=["🎨 Color·A·B","📏 Shape·C·D","🥔 Warts·E·K"];
+const LOOK=[["Gloriously Unidentifiable Lump","🎉 Nobody can name it. PERFECT."],["Red Cabbage","Cabbage in a trench coat!"],["Eggplant","Aubergine alert!"],["Gnarly Eggplant","Still an eggplant. Still no."],["Pumpkin","Wrong soup, pumpkin!"],["Warty Pumpkin","Halloween called."],["Carrot","Bugs Bunny would recognize this."],["Sweet Potato","A yam in disguise!"]];
+const SASS=["“Don’t touch me. I’m in my beet era.”","“I’m not a root, I’m a lifestyle.”","“Pick me. Or don’t. I’ll be here photosynthesizing.”","“I contain multitudes. Mostly water.”","“Soup? Over my dead leaves.”","“I identify as a fruit on weekends.”"];
+const NM=["Sassy","Moody","Smug","Feral","Dramatic","Unbothered","Extra","Salty"],NN=["Sprout","Turnip","Gherkin","Radish","Kale","Pea","Rutabaga","Okra","Chard","Fennel"];
+let AC;
+function tone(f,t=0,d=.12,ty='sine',v=.15,f2){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state=='suspended')AC.resume();const o=AC.createOscillator(),g=AC.createGain(),s=AC.currentTime+t;o.type=ty;o.frequency.setValueAtTime(f,s);if(f2)o.frequency.exponentialRampToValueAtTime(f2,s+d);g.gain.setValueAtTime(v,s);g.gain.exponentialRampToValueAtTime(.001,s+d);o.connect(g);g.connect(AC.destination);o.start(s);o.stop(s+d+.02)}catch(e){}}
+const SFX={
+tap:()=>tone(500,0,.1,'sine',.2,950),
+un:()=>tone(750,0,.1,'sine',.16,380),
+next:()=>tone(620,0,.08,'triangle',.16,820),
+cross:()=>{[523,659,784,1047,1319].forEach((f,i)=>tone(f,i*.07,.16,'triangle',.14));for(let i=0;i<6;i++)tone(500+Math.random()*700,.45+i*.08,.08,'sine',.12,1400)},
+keep:()=>{tone(660,0,.08,'square',.07);tone(990,.09,.16,'square',.07)},
+bin:()=>{tone(420,0,.2,'sawtooth',.07,300);tone(300,.2,.5,'sawtooth',.07,90)},
+win:()=>{[523,659,784,1047,784,1047,1319,1568].forEach((f,i)=>tone(f,i*.12,.28,'triangle',.17));[1568,2093].forEach((f,i)=>tone(f,1.05+i*.12,.5,'sine',.12))}};
+const snd=n=>{if(!S.mute)SFX[n]()};
+const app=document.getElementById('app');
+const rnd=a=>a[Math.random()*a.length|0];
+const fresh=()=>({g:START.map(([n,g],i)=>({id:i,name:n,g})),seeds:[],n:10,mname:"",tut:1});
+let S;try{S=JSON.parse(localStorage[KEY])}catch(e){}
+S=S&&S.g?S:fresh();
+let sel=[],det=null,book=0,win=0,T=S.tut?0:-1,quip="Pick two veggies and cross them. Chaos is encouraged.";
+const save=()=>{try{localStorage[KEY]=JSON.stringify(S)}catch(e){}};
+const on=(p,c,i)=>p.g[c].some(h=>h[i]=='1');
+const ph=p=>on(p,0,0)*4+on(p,1,0)*2+on(p,2,0);
+const vit=p=>[on(p,0,1),on(p,0,2),on(p,1,1),on(p,1,2),on(p,2,1),on(p,2,2)];
+const ok=(p,c)=>!on(p,c,0)&&on(p,c,1)&&on(p,c,2);
+const find=id=>S.g.find(p=>p.id==id)||S.seeds.find(p=>p.id==id);
+function gam(p){return[0,1,2].map(c=>{let k=Math.random()<.5|0,s='';for(let i=0;i<3;i++){if(i&&Math.random()<.3)k^=1;s+=p.g[c][k][i]}return s})}
+function veg(p,w=76){const x=ph(p),c=x>>2&1,l=x>>1&1,k=x&1,col=c?'#f08a24':'#7a3f9d',dk=c?'#c96a0e':'#55286f',ty=l?18:25;
+return`<svg viewBox="0 0 80 90" width="${w}" class="${p.id===win?'wob':''}">`+
+(l?`<ellipse cx="40" cy="52" rx="15" ry="34" fill="${col}"/>`:`<circle cx="40" cy="52" r="27" fill="${col}"/>`)+
+`<path d="M40 ${ty+2} q-14 -18 -22 -8 q10 4 22 8 q12 -12 22 -16 q-6 14 -22 16" fill="#3fa34d"/>`+
+(k?[[31,42],[50,60],[34,72],[48,40],[40,66]].map(a=>`<circle cx="${a[0]}" cy="${a[1]}" r="3.2" fill="${dk}"/>`).join(''):'')+
+`<circle cx="33" cy="50" r="5" fill="#fff"/><circle cx="47" cy="50" r="5" fill="#fff"/><circle cx="34.5" cy="51" r="2.4" fill="#222"/><circle cx="48.5" cy="51" r="2.4" fill="#222"/>`+
+`<path d="M27 43l10 3M53 43l-10 3M33 62q8 6 15 -2" stroke="#222" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>`}
+const card=(p,k)=>`<div class="card ${sel.includes(p.id)?'sel':''} ${det==p.id?'det':''}" data-k="${k}" data-id="${p.id}">${veg(p)}<b>${p.name}</b><div class="chips">${vit(p).map((v,i)=>`<i class="${v?'on':''}">${V[i]}</i>`).join('')}</div><div class="ticks">${[0,1,2].map(c=>ok(p,c)?'✅':'▫️').join('')}</div></div>`;
+const dna=p=>p.g.map((h,c)=>`<div class="chr"><span>${LAB[c]}</span>`+h.map(s=>`<span class="st">${[...s].map((x,i)=>`<u class="${i?'v':'t'}${x=='1'?' d':''}"></u>`).join('')}</span>`).join('')+`</div>`).join('');
+const ov=h=>`<div class="ov"><div class="modal">${h}</div></div>`;
+const desc=x=>`${x&4?'Orange':'Purple'} + ${x&2?'long':'round'} + ${x&1?'warty':'smooth'}`;
+const TUT=[
+["🥣 Welcome to the Soup Lab","Acute Elfism is serious business. The cure is a single Metavegetable that holds vitamins <b>A B C D E K</b>, yet looks like no vegetable anyone has ever heard of. No pressure. Mostly."],
+["🧬 Two copies, one boss","Every gene comes in two copies. A filled dot ● is <b>dominant</b>: it wins. A hollow dot ○ is <b>recessive</b>: it only shows if both copies are hollow. Green dots are vitamins. Pink dots are looks."],
+["🕵️ Don’t look like anything","Color, shape and warts decide what your veg resembles. Dominant means orange, long, warty. Only <b>all-hollow looks</b> escape the Cookbook’s lookalikes. So: hide the looks, keep the vitamins."],
+["🔗 Linked genes, crossing over","Each row is a chromosome: its genes ride together, so a vitamin often hitches a ride with a bad look. Crossing over sometimes shuffles them apart (the best seeds are rare!). A row shows ✅ when its look is hidden and both vitamins are on. Get three ✅ on one plant."]];
+function render(){
+const p=det!=null?find(det):null,isSeed=p&&S.seeds.some(s=>s.id==p.id);
+app.innerHTML=`<h1>🍲 Chef ${CFG.name}’s Soup Lab</h1><div class="sub">Breed the Metavegetable. Looks like nothing. Cures everything elfy.<br><b>${CFG.ded}</b></div><div id="quip">${quip}</div>
+<h3>🌱 Garden (${S.g.length}/9)</h3><div class="grid">${S.g.map(p=>card(p,'g')).join('')}</div>
+${S.seeds.length?`<div class="seeds"><h3 style="margin-top:0">🌰 Fresh seedlings: tap to inspect</h3><div class="grid">${S.seeds.map(p=>card(p,'s')).join('')}</div><p style="margin:6px 0 0"><button class="g2" data-a="done">Compost the rest</button></p></div>`:''}
+${p?`<div class="panel"><b>${p.name}</b><br>Looks like: <b>${LOOK[ph(p)][0]}</b><br><i>${LOOK[ph(p)][1]}</i>${dna(p)}${isSeed?`<button class="go" style="width:100%;margin-top:6px" data-a="keep">Keep this seedling</button>`:''}</div>`:''}
+<div class="bar"><button class="go" data-a="cross">💕 Cross ${sel.length==1?'(self)':sel.length==2?'these two':''}</button><button data-a="compost">🗑️</button><button data-a="book">📖</button><button data-a="mute">${S.mute?'🔇':'🔊'}</button></div>
+${T>=0?ov(`<h2>${TUT[T][0]}</h2><p>${TUT[T][1]}</p><button class="go" data-a="next">${T==3?'Let’s cook!':'Next'}</button>`):''}
+${book?ov(`<h2>📖 Don’t-Look-Like List</h2><ul>${LOOK.map((l,x)=>`<li><b>${l[0]}</b>: ${desc(x)}${x?'':' ✅ the only safe look'}</li>`).join('')}</ul><button class="go" data-a="book">Got it</button>`):''}
+${win?ov(`${veg(find(win),130)}<h2>🎉 METAVEGETABLE!</h2><p>Vitamins A B C D E K: all present.<br>Looks like: absolutely nothing.<br><b>Acute Elfism: cured. Soup: imminent.</b></p><input id="mn" placeholder="Name your Metavegetable" value="${S.mname}"><p><i>${CFG.ded}</i></p><p style="font-size:17px"><b>${CFG.msg}</b></p><button class="go" data-a="close">Stir the pot (keep playing)</button> <button data-a="reset">New brew</button>`):''}`;}
+function chk(p){if([0,1,2].every(c=>ok(p,c))){win=p.id;snd('win');quip="🥁 The cauldron is doing a little dance."}}
+function act(a){
+if(a=='next'){snd('next');T++;if(T>3){T=-1;S.tut=0;save()}}
+else if(a=='book'){snd('next');book=!book}
+else if(a=='close')win=0;
+else if(a=='mute'){S.mute=!S.mute;save();snd('tap')}
+else if(a=='reset'){S=fresh();sel=[];det=null;win=0;save();snd('cross');quip="Fresh pot, fresh puns."}
+else if(a=='cross'){if(!sel.length)quip="Tap a veggie (or two) to be parents first!";else{
+const A=find(sel[0]),B=find(sel[1]??sel[0]);S.seeds=[];
+for(let i=0;i<6;i++){const x=gam(A),y=gam(B);S.seeds.push({id:S.n++,name:rnd(NM)+" "+rnd(NN),g:[0,1,2].map(c=>[x[c],y[c]])})}
+snd('cross');quip=rnd(["Pollen exchanged. No questions asked.","They said it was complicated. It’s genetics.","Six seedlings, zero regrets.","Romance is in the air. And the compost."]);save()}}
+else if(a=='keep'){const p=S.seeds.find(s=>s.id==det);if(p){if(S.g.length>=9)quip="Garden’s full! Compost someone (gently).";else{S.seeds=S.seeds.filter(s=>s!=p);S.g.push(p);snd('keep');quip=rnd(["Adopted! Don’t tell the carrots.","Welcome, you little legume.","Another mouth to photosynthesize."]);save();chk(p)}}}
+else if(a=='done'){snd('bin');S.seeds=[];det=null;save()}
+else if(a=='compost'){if(!sel.length)quip="Select a veggie to compost.";else if(S.g.length-sel.length<2)quip="Keep at least two plants. Soup needs company.";else{S.g=S.g.filter(p=>!sel.includes(p.id));sel=[];det=null;snd('bin');quip="Into the compost it goes. It had a good run. Mostly sideways.";save()}}
+render()}
+app.onclick=e=>{const b=e.target.closest('[data-a]');if(b)return act(b.dataset.a);
+const c=e.target.closest('[data-id]');if(!c)return;const id=+c.dataset.id;det=id;
+if(c.dataset.k=='g'){if(sel.includes(id)){sel=sel.filter(x=>x!=id);snd('un')}else{snd('tap');sel.push(id);if(sel.length>2)sel.shift();quip=rnd(SASS)}}else snd('tap');
+render()};
+app.oninput=e=>{if(e.target.id=='mn'){S.mname=e.target.value;save()}};
+render();
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script></body></html>
